@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 
 import numpy as np
 import random
@@ -29,7 +28,6 @@ def forward_backward_prop(X, labels, params, dimensions):
     ### Unpack network parameters (do not modify)
     ofs = 0
     Dx, H, Dy = (dimensions[0], dimensions[1], dimensions[2])
-
     W1 = np.reshape(params[ofs:ofs+ Dx * H], (Dx, H))
     ofs += Dx * H
     b1 = np.reshape(params[ofs:ofs + H], (1, H))
@@ -40,11 +38,22 @@ def forward_backward_prop(X, labels, params, dimensions):
 
     # Note: compute cost based on `sum` not `mean`.
     ### YOUR CODE HERE: forward propagation
-    raise NotImplementedError
+    Z1 = np.dot(X, W1) + b1
+    X1 = sigmoid(Z1)  # N * 5
+    X2 = np.dot(X1, W2) + b2
+    Y = softmax(X2)
+    cost = -sum(np.log(Y[labels == 1]))
     ### END YOUR CODE
 
     ### YOUR CODE HERE: backward propagation
-    raise NotImplementedError
+    #raise NotImplementedError
+    deta3 = Y - labels    # N x 10
+    gradW2 = np.dot(X1.T, deta3)  # 5 x 10
+    gradb2 = np.sum(deta3, 0, keepdims=True) # 1 x 10
+    gradX1 = np.dot(deta3, W2.T)  # N * 5
+    gradZ1 = sigmoid_grad(X1) * gradX1  # N X 5
+    gradW1 = np.dot(X.T, gradZ1)    # 10 x 5
+    gradb1 = np.sum(gradZ1, 0, keepdims=True) # 1 x 10
     ### END YOUR CODE
 
     ### Stack gradients (do not modify)
@@ -59,13 +68,13 @@ def sanity_check():
     Set up fake data and parameters for the neural network, and test using
     gradcheck.
     """
-    print "Running sanity check..."
+    print("Running sanity check...")
 
     N = 20
     dimensions = [10, 5, 10]
     data = np.random.randn(N, dimensions[0])   # each row will be a datum
     labels = np.zeros((N, dimensions[2]))
-    for i in xrange(N):
+    for i in range(N):
         labels[i, random.randint(0,dimensions[2]-1)] = 1
 
     params = np.random.randn((dimensions[0] + 1) * dimensions[1] + (
@@ -82,7 +91,7 @@ def your_sanity_checks():
     This function will not be called by the autograder, nor will
     your additional tests be graded.
     """
-    print "Running your sanity checks..."
+    print("Running your sanity checks...")
     ### YOUR CODE HERE
     raise NotImplementedError
     ### END YOUR CODE
@@ -90,4 +99,4 @@ def your_sanity_checks():
 
 if __name__ == "__main__":
     sanity_check()
-    your_sanity_checks()
+    #your_sanity_checks()
