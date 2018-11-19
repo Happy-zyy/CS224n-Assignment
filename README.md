@@ -39,7 +39,8 @@ py3下因为编码问题需要额外修改utils文件中的**glove.py**和**tree
 
 4.生成的confusion matrix  
 
-![词向量](./assignment1/result/q4_dev_conf.png)
+![词向量](./assignment1/result/q4_dev_conf.png)  
+
 这个矩阵的主对角线上的元素越多，说明预测越正确。其他元素都是失误。可见模型很难分辨“中性”情感，并倾向于将其分入负面。但模型没有犯下大是大非的错误（将--分入++，或反之）。
 
 5.惩罚因子对效果的影响  
