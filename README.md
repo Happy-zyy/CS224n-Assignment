@@ -12,6 +12,8 @@
 
 + 2018/11/14  完成作业assignment1
 
++ 2018/11/20 完成作业assignment2
+
 
 ## assignment1备注
 py3下因为编码问题需要额外修改utils文件中的**glove.py**和**treebank.py** ，另外在运行q3.run和q4之前需要运行数据下载脚本**get_datasets.sh** 。
@@ -47,6 +49,12 @@ py3下因为编码问题需要额外修改utils文件中的**glove.py**和**tree
 
 ![词向量](./assignment1/result/q4_reg_v_acc.png)
 
+
+## assignment2备注
+有了assignment1的基础，完成assignment1还算顺利，也是越来体会到编程不是那么重要了，只要公式推导出来了，编程也就是水到渠成事情。
+这里需要注意一下，在用py3运行q2_parser_model.py的过程中，q2_parser_transitions.py会报一个错，我查看了原因时因为当stack中只有一个root时，下一步的动作竟然时left-arc，这应该时model时predict错误了。但是我强行修改了动作使其只能shift后，训练过程在dev上的精度只有29.06，这就很郁闷了。  
+
+![词向量](./assignment2/result/result.png)
 
 
 
