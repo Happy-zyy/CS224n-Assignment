@@ -21,7 +21,7 @@ class Config(object):
     n_features = 100
     n_classes = 5
     batch_size = 64
-    n_epochs = 50
+    n_epochs = 10
     lr = 1e-4
 
 
