@@ -38,7 +38,7 @@ class Config:
     """
     max_length = 20 # Length of sequence used.
     batch_size = 100
-    n_epochs = 4
+    n_epochs = 40
     lr = 0.2
     max_grad_norm = 5.
 
