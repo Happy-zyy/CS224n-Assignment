@@ -38,7 +38,7 @@ class Config:
     """
     max_length = 20 # Length of sequence used.
     batch_size = 100
-    n_epochs = 40
+    n_epochs = 4
     lr = 0.2
     max_grad_norm = 5.
 
@@ -87,8 +87,9 @@ class SequencePredictor(Model):
 
         x = self.inputs_placeholder
         ### YOUR CODE HERE (~2-3 lines)
+        preds = tf.nn.dynamic_rnn(cell, x, dtype = tf.float32)[1]
+        preds = tf.sigmoid(preds)
         ### END YOUR CODE
-
         return preds #state # preds
 
     def add_loss_op(self, preds):
@@ -108,7 +109,8 @@ class SequencePredictor(Model):
         y = self.labels_placeholder
 
         ### YOUR CODE HERE (~1-2 lines)
-
+        loss = tf.nn.l2_loss(preds - y)
+        loss = tf.reduce_mean(loss)
         ### END YOUR CODE
 
         return loss
@@ -146,6 +148,19 @@ class SequencePredictor(Model):
         # - Remember to clip gradients only if self.config.clip_gradients
         # is True.
         # - Remember to set self.grad_norm
+
+        grads_and_vars = optimizer.compute_gradients(loss)
+        variables = [output[1] for output in grads_and_vars]
+        gradients = [output[0] for output in grads_and_vars]
+        if self.config.clip_gradients:
+            tmp_gradients = tf.clip_by_global_norm(gradients, clip_norm=self.config.max_grad_norm)[0]
+            gradients = tmp_gradients
+
+        grads_and_vars = [(gradients[i], variables[i]) for i in range(len(gradients))]
+        self.grad_norm = tf.global_norm(gradients)
+
+        train_op = optimizer.apply_gradients(grads_and_vars)
+
 
         ### END YOUR CODE
 
